@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="formvalidation" />
+    <title>form validation</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+      body {
+        height: 100vh;
+        background-color: black;
+      }
+      #box {
+        min-height: 60vh;
+        background-color: white;
+        width: 400px;
+        margin: 0px auto;
+        margin-top: 60px;
+        text-align: center;
+        padding: 20px;
+      }
+      .first {
+        margin-top: 20px;
+      }
+      input {
+        width: 100%;
+        height: 30px;
+        border: 2px solid darkgray;
+        margin-top: 5px;
+      }
+      .content {
+        text-align: left;
+        margin-top: 5px;
+      }
+      button {
+        margin-top: 10px;
+        width: 100%;
+        height: 30px;
+        background-color: #11009e;
+        color: white;
+      }
+      input:focus {
+        outline: 0;
+      }
+      .inputgroup > .error {
+        color: red;
+        font-size: 16px;
+        text-align: left;
+        margin-top: 5px;
+      }
+      .inputgroup.success input {
+        border-color: green;
+      }
+      .inputgroup.error input {
+        border-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="box">
+      <form action="#" id="form">
+        <h2>Simple Form Validation</h2>
+        <div class="inputgroup">
+          <p class="first content" style="margin-top: 20px">Username:</p>
+          <input type="text" name="username" id="username" />
+          <div class="error"></div>
+        </div>
+        <div class="inputgroup">
+          <p class="content">Email:</p>
+          <input type="text" name="email" id="email" />
+          <div class="error"></div>
+        </div>
+        <div class="inputgroup">
+          <p class="content">Password</p>
+          <input type="password" name="password" id="password" />
+          <div class="error"></div>
+          <div></div>
+        </div>
+        <div class="inputgroup">
+          <p class="content">Confirm Password:</p>
+          <input type="password" name="cpassword" id="cpassword" />
+          <div class="error"></div>
+          <div></div>
+        </div>
+        <button id="button">Sign Up</button>
+      </form>
+    </section>
+    <script>
+      let form = document.querySelector("#form");
+      let name = document.querySelector("#username");
+      let email = document.querySelector("#email");
+      let password = document.querySelector("#password");
+      let cpassword = document.querySelector("#cpassword");
+      let button = document.querySelector("#button");
+      console.log(password);
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        validateInputs();
+        validateEmail();
+      });
+      function validateInputs() {
+        let nameValue = name.value.trim();
+        let emailValue = email.value.trim();
+        let passwordValue = password.value.trim();
+        let cpasswordValue = cpassword.value.trim();
+        if (nameValue === "") {
+          FindError(name, "Username is required ");
+        } else {
+          FindSuccess(name);
+        }
+
+        if (passwordValue === "") {
+          FindError(password, "password is required");
+        } else if (passwordValue.length < 8) {
+          FindError(password, "password must be atleast 8 characters");
+        } else {
+          FindSuccess(password);
+        }
+        if (cpasswordValue === "") {
+          FindError(cpassword, "Confirm password is required");
+        } else if (cpasswordValue !== passwordValue) {
+          FindError(cpassword, "Password does not match");
+        } else {
+          FindSuccess(cpassword);
+        }
+      }
+      function FindError(element, message) {
+        let inputGroup = element.parentElement;
+        let errorElement = inputGroup.querySelector(".error");
+        errorElement.innerText = message;
+        inputGroup.classList.add("error");
+        inputGroup.classList.remove("success");
+      }
+      function FindSuccess(element) {
+        let inputGroup = element.parentElement;
+        let errorElement = inputGroup.querySelector(".error");
+        errorElement.innerText = "";
+        inputGroup.classList.add("success");
+        inputGroup.classList.remove("error");
+      }
+      function validateEmail() {
+        let emailValue = email.value.trim();
+        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (emailValue.match(pattern)) {
+          FindSuccess(email);
+        } else {
+          FindError(email, "enter the valid mail id");
+        }
+      }
+    </script>
+  </body>
+</html>
